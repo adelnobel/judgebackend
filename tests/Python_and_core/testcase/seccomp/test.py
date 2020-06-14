@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import print_function
+import timeit
 import _judger
 import signal
 import shutil
@@ -12,6 +13,10 @@ class SeccompTest(base.BaseTestCase):
     def setUp(self):
         print("Running", self._testMethodName)
         self.workspace = self.init_workspace("integration")
+        self.startTime = timeit.default_timer()
+
+    def tearDown(self):
+        print("Time: ", timeit.default_timer() - self.startTime)
 
     def _compile_c(self, src_name, extra_flags=None):
         return super(SeccompTest, self)._compile_c("../../test_src/seccomp/" + src_name, extra_flags)
@@ -44,7 +49,7 @@ class SeccompTest(base.BaseTestCase):
         result = _judger.run(**config)
         # without seccomp
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("Helloworld\n", self.output_content(config["output_path"]))
+        self.assertEqual("Helloworld\n", self.get_file_contents(config["output_path"]))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -67,7 +72,7 @@ class SeccompTest(base.BaseTestCase):
         result = _judger.run(**config)
         # without seccomp
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.output_content(path))
+        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -90,7 +95,7 @@ class SeccompTest(base.BaseTestCase):
         result = _judger.run(**config)
         # without seccomp
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.output_content(path))
+        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -113,7 +118,7 @@ class SeccompTest(base.BaseTestCase):
         result = _judger.run(**config)
         # without seccomp
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.output_content(path))
+        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -136,7 +141,7 @@ class SeccompTest(base.BaseTestCase):
         result = _judger.run(**config)
         # without seccomp
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.output_content(path))
+        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -162,7 +167,7 @@ class SeccompTest(base.BaseTestCase):
         config["exe_path"] = self._compile_c("execveat.c")
         config["output_path"] = config["error_path"] = self.output_path()
         result = _judger.run(**config)
-        if "syscall not found" in self.output_content(config["output_path"]):
+        if "syscall not found" in self.get_file_contents(config["output_path"]):
             print("execveat syscall not found, test ignored")
             return
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)

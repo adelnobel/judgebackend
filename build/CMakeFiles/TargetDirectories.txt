@@ -1,0 +1,7 @@
+/home/adelaly/judgebackend/build/CMakeFiles/install/strip.dir
+/home/adelaly/judgebackend/build/CMakeFiles/edit_cache.dir
+/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir
+/home/adelaly/judgebackend/build/CMakeFiles/install.dir
+/home/adelaly/judgebackend/build/CMakeFiles/rebuild_cache.dir
+/home/adelaly/judgebackend/build/CMakeFiles/list_install_components.dir
+/home/adelaly/judgebackend/build/CMakeFiles/install/local.dir

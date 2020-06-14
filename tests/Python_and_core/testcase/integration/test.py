@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import print_function
+import timeit
 import sys
 import signal
 import os
@@ -13,6 +14,10 @@ class IntegrationTest(base.BaseTestCase):
     def setUp(self):
         print("Running", self._testMethodName)
         self.workspace = self.init_workspace("integration")
+        self.startTime = timeit.default_timer()
+    
+    def tearDown(self):
+        print("Time: ", timeit.default_timer() - self.startTime)
         
     def _compile_c(self, src_name, extra_flags=None):
         return super(IntegrationTest, self)._compile_c("../../test_src/integration/" + src_name, extra_flags)
@@ -135,14 +140,14 @@ class IntegrationTest(base.BaseTestCase):
         result = _judger.run(**config)
         output = "judger_test\nHello world"
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual(output, self.output_content(config["output_path"]))
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
         config["exe_path"] = self._compile_c("math.c")
         config["input_path"] = "/dev/null"
         config["output_path"] = config["error_path"] = self.output_path()
         result = _judger.run(**config)
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("abs 1024", self.output_content(config["output_path"]))
+        self.assertEqual("abs 1024", self.get_file_contents(config["output_path"]))
 
     def test_args(self):
         config = self.base_config
@@ -152,7 +157,7 @@ class IntegrationTest(base.BaseTestCase):
         result = _judger.run(**config)
         output = "argv[0]: /tmp/integration/args\nargv[1]: test\nargv[2]: hehe\nargv[3]: 000\n"
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual(output, self.output_content(config["output_path"]))
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
     def test_env(self):
         config = self.base_config
@@ -161,7 +166,7 @@ class IntegrationTest(base.BaseTestCase):
         result = _judger.run(**config)
         output = "judger_test\njudger\n"
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual(output, self.output_content(config["output_path"]))
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
     def test_real_time(self):
         config = self.base_config
@@ -262,7 +267,7 @@ class IntegrationTest(base.BaseTestCase):
         result = _judger.run(**config)
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
         output = "stderr\n+++++++++++++++\n--------------\nstdout\n"
-        self.assertEqual(output, self.output_content(config["output_path"]))
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
     def test_uid_and_gid(self):
         config = self.base_config
@@ -273,7 +278,7 @@ class IntegrationTest(base.BaseTestCase):
         result = _judger.run(**config)
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
         output = "uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)\nuid 65534\ngid 65534\n"
-        self.assertEqual(output, self.output_content(config["output_path"]))
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
     def test_gcc_random(self):
         config = self.base_config
@@ -316,7 +321,7 @@ class IntegrationTest(base.BaseTestCase):
         config["max_stack"] = 128 * 1024 * 1024
         result = _judger.run(**config)
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("big stack", self.output_content(config["output_path"]))
+        self.assertEqual("big stack", self.get_file_contents(config["output_path"]))
 
     def test_writev(self):
         config = self.base_config

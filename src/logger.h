@@ -13,6 +13,7 @@ void log_close(FILE *);
 
 void log_write(int level, const char *source_filename, const int line_number, const FILE *log_fp, const char *, ...);
 
+#define JUDGER_DEBUG
 #ifdef JUDGER_DEBUG
 #define LOG_DEBUG(log_fp, x...)   log_write(LOG_LEVEL_DEBUG, __FILE__, __LINE__, log_fp, ##x)
 #else

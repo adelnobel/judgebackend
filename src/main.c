@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
             output_path = arg_strn(NULL, "output_path", STR_PLACE_HOLDER, 0, 1, "Output Path"),
             error_path = arg_strn(NULL, "error_path", STR_PLACE_HOLDER, 0, 1, "Error Path"),
 
-            args = arg_strn(NULL, "args", STR_PLACE_HOLDER, 0, 255, "Arg"),
+            args = arg_strn(NULL, "args", STR_PLACE_HOLDER, 0, 300, "Arg"),
             env = arg_strn(NULL, "env", STR_PLACE_HOLDER, 0, 255, "Env"),
 
             log_path = arg_strn(NULL, "log_path", STR_PLACE_HOLDER, 0, 1, "Log Path"),

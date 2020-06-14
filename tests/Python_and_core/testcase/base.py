@@ -32,23 +32,25 @@ class BaseTestCase(TestCase):
         return "".join([random.choice("123456789abcdef") for _ in range(12)])
 
     def _compile_c(self, src_name, extra_flags=None):
-        path = os.path.dirname(os.path.abspath(__file__))
         exe_path = os.path.join(self.workspace, src_name.split("/")[-1].split(".")[0])
         flags = " "
         if extra_flags:
             flags += " ".join(extra_flags)
-        cmd = ("gcc {0} -g -O0 -static -o {1}" + flags).format(os.path.join(path, src_name), exe_path)
+        cmd = ("gcc {0} -g -O0 -static -o {1}" + flags).format(self.get_file_absolute_path(src_name), exe_path)
         if os.system(cmd):
             raise AssertionError("compile error, cmd: {0}".format(cmd))
         return exe_path
 
     def _compile_cpp(self, src_name):
-        path = os.path.dirname(os.path.abspath(__file__))
         exe_path = os.path.join(self.workspace, src_name.split("/")[-1].split(".")[0])
-        cmd = "g++ {0} -g -O0 -o {1}".format(os.path.join(path, src_name), exe_path)
+        cmd = "g++ {0} -g -O0 -o {1}".format(self.get_file_absolute_path(src_name), exe_path)
         if os.system(cmd):
             raise AssertionError("compile error, cmd: {0}".format(cmd))
         return exe_path
+    
+    def get_file_absolute_path(self, src_name):
+        path = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(path, src_name)
 
     def make_input(self, content):
         path = os.path.join(self.workspace, self.rand_str())
@@ -59,7 +61,7 @@ class BaseTestCase(TestCase):
     def output_path(self):
         return os.path.join(self.workspace, self.rand_str())
 
-    def output_content(self, path):
+    def get_file_contents(self, path):
         with open(path, "r") as f:
             return f.read()
 
@@ -67,9 +69,9 @@ class BaseTestCase(TestCase):
     def base_config(self):
         config = {"max_cpu_time": 1000,
                   "max_real_time": 3000,
-                  "max_memory": 128 * 1024 * 1024,
-                  "max_stack": 32 * 1024 * 1024,
-                  "max_process_number": 10,
+                  "max_memory": 300 * 1024 * 1024,
+                  "max_stack": 80 * 1024 * 1024,
+                  "max_process_number": 1,
                   "max_output_size": 1024 * 1024,
                   "exe_path": "/bin/ls",
                   "input_path": "/dev/null",

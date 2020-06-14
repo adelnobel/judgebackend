@@ -6,6 +6,7 @@ from unittest import TestCase, main
 
 from testcase.integration.test import IntegrationTest
 from testcase.seccomp.test import SeccompTest
+from testcase.python.test import PythonTest
 
 ver = _judger.VERSION
 print("Judger version %d.%d.%d" % ((ver >> 16) & 0xff, (ver >> 8) & 0xff, ver & 0xff))
