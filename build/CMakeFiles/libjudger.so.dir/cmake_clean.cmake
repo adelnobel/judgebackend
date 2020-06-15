@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o"
   "CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o"
   "CMakeFiles/libjudger.so.dir/src/rules/general.o"
+  "CMakeFiles/libjudger.so.dir/src/rules/python.o"
   "../output/libjudger.so.pdb"
   "../output/libjudger.so"
 )

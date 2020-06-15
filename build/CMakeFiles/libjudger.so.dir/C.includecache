@@ -230,6 +230,22 @@ errno.h
 ../runner.h
 /home/adelaly/judgebackend/src/runner.h
 
+/home/adelaly/judgebackend/src/rules/python.c
+stdio.h
+-
+seccomp.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+stdbool.h
+-
+../runner.h
+/home/adelaly/judgebackend/src/runner.h
+
 /home/adelaly/judgebackend/src/rules/seccomp_rules.h
 stdbool.h
 -

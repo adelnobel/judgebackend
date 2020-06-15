@@ -31,6 +31,9 @@ CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o: ../src/runner.h
 CMakeFiles/libjudger.so.dir/src/rules/general.o: ../src/rules/general.c
 CMakeFiles/libjudger.so.dir/src/rules/general.o: ../src/runner.h
 
+CMakeFiles/libjudger.so.dir/src/rules/python.o: ../src/rules/python.c
+CMakeFiles/libjudger.so.dir/src/rules/python.o: ../src/runner.h
+
 CMakeFiles/libjudger.so.dir/src/runner.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/runner.o: ../src/killer.h
 CMakeFiles/libjudger.so.dir/src/runner.o: ../src/logger.h

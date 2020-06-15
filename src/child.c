@@ -54,7 +54,7 @@ void child_process(FILE *log_fp, struct config *_config) {
         }
     }
 
-    // set cpu time limit (in seconds)
+    // set cpu time limit (in seconds), we ceil to the seconds because strlimit cpu only takes seconds
     if (_config->max_cpu_time != UNLIMITED) {
         struct rlimit max_cpu_time;
         max_cpu_time.rlim_cur = max_cpu_time.rlim_max = (rlim_t) ((_config->max_cpu_time + 1000) / 1000);
@@ -125,6 +125,17 @@ void child_process(FILE *log_fp, struct config *_config) {
         }
     }
 
+    // set gid
+    gid_t group_list[] = {_config->gid};
+    if (_config->gid != -1 && (setgid(_config->gid) == -1 || setgroups(sizeof(group_list) / sizeof(gid_t), group_list) == -1)) {
+        CHILD_ERROR_EXIT(SETUID_FAILED);
+    }
+
+    // set uid
+    if (_config->uid != -1 && setuid(_config->uid) == -1) {
+        CHILD_ERROR_EXIT(SETUID_FAILED);
+    }
+
     // load seccomp
     if (_config->seccomp_rule_name != NULL) {
         if (strcmp("c_cpp", _config->seccomp_rule_name) == 0) {
@@ -142,30 +153,15 @@ void child_process(FILE *log_fp, struct config *_config) {
                 CHILD_ERROR_EXIT(LOAD_SECCOMP_FAILED);
             }
         }
-        // other rules
+        else if (strcmp("python", _config->seccomp_rule_name) == 0) {
+            if (python_seccomp_rules(_config) != SUCCESS) {
+                CHILD_ERROR_EXIT(LOAD_SECCOMP_FAILED);
+            }
+        }
         else {
             // rule does not exist
             CHILD_ERROR_EXIT(LOAD_SECCOMP_FAILED);
         }
-    }
-
-
-    // set gid
-    gid_t group_list[] = {_config->gid};
-    /*char temp[100];
-    sprintf(temp, "GID %d", _config->gid);
-    LOG_DEBUG(log_fp, temp);
-
-
-    sprintf(temp, "UID %d", _config->uid);
-    LOG_DEBUG(log_fp, temp);*/
-    if (_config->gid != -1 && (setgid(_config->gid) == -1 || setgroups(sizeof(group_list) / sizeof(gid_t), group_list) == -1)) {
-        CHILD_ERROR_EXIT(SETUID_FAILED);
-    }
-
-    // set uid
-    if (_config->uid != -1 && setuid(_config->uid) == -1) {
-        CHILD_ERROR_EXIT(SETUID_FAILED);
     }
 
     execve(_config->exe_path, _config->args, _config->env);

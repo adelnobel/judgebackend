@@ -69,9 +69,9 @@ class BaseTestCase(TestCase):
     def base_config(self):
         config = {"max_cpu_time": 1000,
                   "max_real_time": 3000,
-                  "max_memory": 300 * 1024 * 1024,
-                  "max_stack": 80 * 1024 * 1024,
-                  "max_process_number": 1,
+                  "max_memory": 128 * 1024 * 1024,
+                  "max_stack": 32 * 1024 * 1024,
+                  "max_process_number": 10,
                   "max_output_size": 1024 * 1024,
                   "exe_path": "/bin/ls",
                   "input_path": "/dev/null",

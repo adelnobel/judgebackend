@@ -25,6 +25,26 @@ class IntegrationTest(base.BaseTestCase):
     def _compile_cpp(self, src_name):
         return super(IntegrationTest, self)._compile_cpp("../../test_src/integration/" + src_name)
 
+    def test_get_time(self):
+        config = self.base_config
+        config["exe_path"] = self._compile_c("time.c")
+        config["seccomp_rule_name"] = "general"
+
+        result = _judger.run(**config)
+        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
+
+    def test_uid_and_gid(self):
+        config = self.base_config
+        config["exe_path"] = self._compile_c("uid_gid.c")
+        config["output_path"] = config["error_path"] = self.output_path()
+        config["uid"] = 65534
+        config["gid"] = 65534
+        result = _judger.run(**config)
+        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
+        output = "uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)\nuid 65534\ngid 65534\n"
+        self.assertEqual(output, self.get_file_contents(config["output_path"]))
+
+
     def test_args_must_be_list(self):
         with self.assertRaisesRegexp(ValueError, "args must be a list"):
             _judger.run(max_cpu_time=1000, max_real_time=2000,
@@ -167,7 +187,7 @@ class IntegrationTest(base.BaseTestCase):
         output = "judger_test\njudger\n"
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
         self.assertEqual(output, self.get_file_contents(config["output_path"]))
-
+    
     def test_real_time(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("sleep.c")
@@ -213,7 +233,7 @@ class IntegrationTest(base.BaseTestCase):
         self.assertTrue(result["memory"] >= 102400000 * 4)
 
     def test_memory4(self):
-        """parent process memory should not affect child process"""
+        # parent process memory should not affect child process
         a = ["test" for i in range(2000000)]
         # get self maxrss
         max_rss = resource.getrusage(resource.RUSAGE_SELF)[2]
@@ -269,17 +289,6 @@ class IntegrationTest(base.BaseTestCase):
         output = "stderr\n+++++++++++++++\n--------------\nstdout\n"
         self.assertEqual(output, self.get_file_contents(config["output_path"]))
 
-    def test_uid_and_gid(self):
-        config = self.base_config
-        config["exe_path"] = self._compile_c("uid_gid.c")
-        config["output_path"] = config["error_path"] = self.output_path()
-        config["uid"] = 65534
-        config["gid"] = 65534
-        result = _judger.run(**config)
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        output = "uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)\nuid 65534\ngid 65534\n"
-        self.assertEqual(output, self.get_file_contents(config["output_path"]))
-
     def test_gcc_random(self):
         config = self.base_config
         config["max_memory"] = _judger.UNLIMITED
@@ -329,14 +338,6 @@ class IntegrationTest(base.BaseTestCase):
         config["seccomp_rule_name"] = "c_cpp"
         config["input_path"] = self.make_input("111" * 10000 + "\n")
         config["output_path"] = config["error_path"] = self.output_path()
-
         result = _judger.run(**config)
         self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
 
-    def test_get_time(self):
-        config = self.base_config
-        config["exe_path"] = self._compile_c("time.c")
-        config["seccomp_rule_name"] = "c_cpp"
-
-        result = _judger.run(**config)
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)

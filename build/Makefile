@@ -290,6 +290,21 @@ src/rules/general.s:
 .PHONY : src/rules/general.s
 
 # target to build an object file
+src/rules/python.o:
+	$(MAKE) -f CMakeFiles/libjudger.so.dir/build.make CMakeFiles/libjudger.so.dir/src/rules/python.o
+.PHONY : src/rules/python.o
+
+# target to preprocess a source file
+src/rules/python.i:
+	$(MAKE) -f CMakeFiles/libjudger.so.dir/build.make CMakeFiles/libjudger.so.dir/src/rules/python.i
+.PHONY : src/rules/python.i
+
+# target to generate assembly for a file
+src/rules/python.s:
+	$(MAKE) -f CMakeFiles/libjudger.so.dir/build.make CMakeFiles/libjudger.so.dir/src/rules/python.s
+.PHONY : src/rules/python.s
+
+# target to build an object file
 src/runner.o:
 	$(MAKE) -f CMakeFiles/libjudger.so.dir/build.make CMakeFiles/libjudger.so.dir/src/runner.o
 .PHONY : src/runner.o
@@ -341,6 +356,9 @@ help:
 	@echo "... src/rules/general.o"
 	@echo "... src/rules/general.i"
 	@echo "... src/rules/general.s"
+	@echo "... src/rules/python.o"
+	@echo "... src/rules/python.i"
+	@echo "... src/rules/python.s"
 	@echo "... src/runner.o"
 	@echo "... src/runner.i"
 	@echo "... src/runner.s"

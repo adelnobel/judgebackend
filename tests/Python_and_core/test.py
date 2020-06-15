@@ -4,8 +4,8 @@ import sys
 import _judger
 from unittest import TestCase, main
 
-from testcase.integration.test import IntegrationTest
-from testcase.seccomp.test import SeccompTest
+#from testcase.integration.test import IntegrationTest
+#from testcase.seccomp.test import SeccompTest
 from testcase.python.test import PythonTest
 
 ver = _judger.VERSION

@@ -79,6 +79,7 @@ def run(max_cpu_time,
 
     proc = subprocess.Popen(proc_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = proc.communicate()
+    print(out)
     if err:
         raise ValueError("Error occurred while calling judger: {}".format(err))
     return json.loads(out.decode("utf-8"))

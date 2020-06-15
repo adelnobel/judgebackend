@@ -82,7 +82,9 @@ void run(struct config *_config, struct result *_result) {
         // wait for child process to terminate
         // on success, returns the process ID of the child whose state has changed;
         // On error, -1 is returned.
-        if (wait4(child_pid, &status, WSTOPPED, &resource_usage) == -1) {
+        int wait_status = wait4(child_pid, &status, WSTOPPED, &resource_usage);
+        if (wait_status == -1) {
+            LOG_WARNING(log_fp, "Couldn't wait for process! %s", wait_status);
             kill_pid(child_pid);
             ERROR_EXIT(WAIT_FAILED);
         }
@@ -92,9 +94,13 @@ void run(struct config *_config, struct result *_result) {
 
         // process exited, we may need to cancel timeout killer thread
         if (_config->max_real_time != UNLIMITED) {
-            if (pthread_cancel(tid) != 0) {
-                // todo logging
-            };
+            int cancel_thread_status = pthread_cancel(tid);
+            if (cancel_thread_status != 0) {
+                // 3 means No Process Found which means the thread already exited before
+                if (cancel_thread_status != 3) {
+                    LOG_WARNING(log_fp, "Couldn't cancel the thread %d! Error %d %s ", tid, cancel_thread_status, strerror(cancel_thread_status));
+                }
+            }
         }
 
         if (WIFSIGNALED(status) != 0) {
@@ -112,6 +118,7 @@ void run(struct config *_config, struct result *_result) {
 
             if (_result->exit_code != 0) {
                 _result->result = RUNTIME_ERROR;
+                LOG_INFO(log_fp, "Failed with signal %d", _result->signal);
             }
 
             if (_result->signal == SIGSEGV) {
@@ -120,11 +127,13 @@ void run(struct config *_config, struct result *_result) {
                 }
                 else {
                     _result->result = RUNTIME_ERROR;
+                    LOG_INFO(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
                 }
             }
             else {
                 if (_result->signal != 0) {
                     _result->result = RUNTIME_ERROR;
+                    LOG_INFO(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
                 }
                 if (_config->max_memory != UNLIMITED && _result->memory > _config->max_memory) {
                     _result->result = MEMORY_LIMIT_EXCEEDED;

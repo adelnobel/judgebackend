@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/adelaly/judgebackend/src/rules/c_cpp.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o"
   "/home/adelaly/judgebackend/src/rules/c_cpp_file_io.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o"
   "/home/adelaly/judgebackend/src/rules/general.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/general.o"
+  "/home/adelaly/judgebackend/src/rules/python.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/python.o"
   "/home/adelaly/judgebackend/src/runner.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/runner.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
