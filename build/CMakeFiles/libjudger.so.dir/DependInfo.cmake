@@ -4,16 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/adelaly/judgebackend/src/argtable3.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/argtable3.o"
-  "/home/adelaly/judgebackend/src/child.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/child.o"
-  "/home/adelaly/judgebackend/src/killer.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/killer.o"
-  "/home/adelaly/judgebackend/src/logger.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/logger.o"
-  "/home/adelaly/judgebackend/src/main.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/main.o"
-  "/home/adelaly/judgebackend/src/rules/c_cpp.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o"
-  "/home/adelaly/judgebackend/src/rules/c_cpp_file_io.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o"
-  "/home/adelaly/judgebackend/src/rules/general.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/general.o"
-  "/home/adelaly/judgebackend/src/rules/python.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/python.o"
-  "/home/adelaly/judgebackend/src/runner.c" "/home/adelaly/judgebackend/build/CMakeFiles/libjudger.so.dir/src/runner.o"
+  "/home/adelaly/Desktop/judgebackend/src/argtable3.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/argtable3.o"
+  "/home/adelaly/Desktop/judgebackend/src/child.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/child.o"
+  "/home/adelaly/Desktop/judgebackend/src/killer.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/killer.o"
+  "/home/adelaly/Desktop/judgebackend/src/logger.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/logger.o"
+  "/home/adelaly/Desktop/judgebackend/src/main.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/main.o"
+  "/home/adelaly/Desktop/judgebackend/src/rules/c_cpp.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o"
+  "/home/adelaly/Desktop/judgebackend/src/rules/c_cpp_file_io.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o"
+  "/home/adelaly/Desktop/judgebackend/src/rules/general.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/general.o"
+  "/home/adelaly/Desktop/judgebackend/src/rules/python.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/rules/python.o"
+  "/home/adelaly/Desktop/judgebackend/src/runner.c" "/home/adelaly/Desktop/judgebackend/build/CMakeFiles/libjudger.so.dir/src/runner.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

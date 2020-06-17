@@ -35,7 +35,8 @@ enum {
     DUP2_FAILED = -8,
     SETUID_FAILED = -9,
     EXECVE_FAILED = -10,
-    SPJ_ERROR = -11
+    SPJ_ERROR = -11,
+    CHROOT_FAILED = -12
 };
 
 
@@ -55,6 +56,7 @@ struct config {
     char *env[ENV_MAX_NUMBER];
     char *log_path;
     char *seccomp_rule_name;
+    char *chroot_path;
     uid_t uid;
     gid_t gid;
 };

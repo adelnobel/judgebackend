@@ -38,6 +38,7 @@ def run(max_cpu_time,
         args,
         env,
         log_path,
+        chroot_path,
         seccomp_rule_name,
         uid,
         gid,
@@ -46,7 +47,7 @@ def run(max_cpu_time,
     int_vars = ["max_cpu_time", "max_real_time",
                 "max_memory", "max_stack", "max_output_size",
                 "max_process_number", "uid", "gid", "memory_limit_check_only"]
-    str_vars = ["exe_path", "input_path", "output_path", "error_path", "log_path"]
+    str_vars = ["exe_path", "input_path", "output_path", "error_path", "log_path", "chroot_path"]
 
     proc_args = ["/usr/lib/judger/libjudger.so"]
 

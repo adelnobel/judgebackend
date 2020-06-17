@@ -1,5 +1,11 @@
+#define _GNU_SOURCE
+#define _POSIX_SOURCE
+
 #include "argtable3.h"
 #include "runner.h"
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
 
 #define INT_PLACE_HOLDER "<n>"
 #define STR_PLACE_HOLDER "<str>"
@@ -7,7 +13,7 @@
 struct arg_lit *verb, *help, *version;
 struct arg_int *max_cpu_time, *max_real_time, *max_memory, *max_stack, *memory_limit_check_only,
         *max_process_number, *max_output_size, *uid, *gid;
-struct arg_str *exe_path, *input_path, *output_path, *error_path, *args, *env, *log_path, *seccomp_rule_name;
+struct arg_str *exe_path, *input_path, *output_path, *error_path, *args, *env, *log_path, *chroot_path, *seccomp_rule_name;
 struct arg_end *end;
 
 int main(int argc, char *argv[]) {
@@ -27,10 +33,11 @@ int main(int argc, char *argv[]) {
             output_path = arg_strn(NULL, "output_path", STR_PLACE_HOLDER, 0, 1, "Output Path"),
             error_path = arg_strn(NULL, "error_path", STR_PLACE_HOLDER, 0, 1, "Error Path"),
 
-            args = arg_strn(NULL, "args", STR_PLACE_HOLDER, 0, 300, "Arg"),
+            args = arg_strn(NULL, "args", STR_PLACE_HOLDER, 0, 255, "Arg"),
             env = arg_strn(NULL, "env", STR_PLACE_HOLDER, 0, 255, "Env"),
 
             log_path = arg_strn(NULL, "log_path", STR_PLACE_HOLDER, 0, 1, "Log Path"),
+            chroot_path = arg_strn(NULL, "chroot_path", STR_PLACE_HOLDER, 0, 1, "Chroot jail path"),
             seccomp_rule_name = arg_strn(NULL, "seccomp_rule_name", STR_PLACE_HOLDER, 0, 1, "Seccomp Rule Name"),
 
             uid = arg_intn(NULL, "uid", INT_PLACE_HOLDER, 0, 1, "UID (default 65534)"),
@@ -61,6 +68,17 @@ int main(int argc, char *argv[]) {
         printf("Try '%s --help' for more information.\n", name);
         exitcode = 1;
         goto exit;
+    }
+
+    // chroot
+    if (chroot_path->count > 0) {
+        char* path = (char *)chroot_path->sval[0];
+        if (chdir(path) < 0 || chroot(path) < 0) {
+            printf("{\n"
+                "    \"chroot_error\": %s,\n"
+                "}", strerror(errno));
+            return 0;
+        }
     }
 
     struct config _config;
@@ -153,6 +171,13 @@ int main(int argc, char *argv[]) {
     } else {
         _config.seccomp_rule_name = NULL;
     }
+ 
+    if (chroot_path->count > 0) {
+        _config.chroot_path = (char *)chroot_path->sval[0];
+    } else {
+        _config.chroot_path = NULL;
+    }
+
 
     if (uid->count > 0) {
         _config.uid = (uid_t)*(uid->ival);

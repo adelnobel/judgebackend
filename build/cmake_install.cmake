@@ -1,4 +1,4 @@
-# Install script for directory: /home/adelaly/judgebackend
+# Install script for directory: /home/adelaly/Desktop/judgebackend
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -46,7 +46,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/lib/judger" TYPE FILE PERMISSIONS OWNER_EXECUTE OWNER_READ FILES "/home/adelaly/judgebackend/output/libjudger.so")
+file(INSTALL DESTINATION "/usr/lib/judger" TYPE FILE PERMISSIONS OWNER_EXECUTE OWNER_READ FILES "/home/adelaly/Desktop/judgebackend/output/libjudger.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -57,5 +57,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/adelaly/judgebackend/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/adelaly/Desktop/judgebackend/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -13,7 +13,7 @@ int general_seccomp_rules(struct config *_config) {
                                 SCMP_SYS(fork), SCMP_SYS(vfork),
                                 SCMP_SYS(kill), 
                                 SCMP_SYS(nanosleep),
-                                SCMP_SYS(futex),
+                                //SCMP_SYS(futex),
 #ifdef __NR_execveat
                                 SCMP_SYS(execveat)
 #endif

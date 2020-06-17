@@ -2,6 +2,7 @@
 #include <seccomp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <stdbool.h>
 
@@ -19,12 +20,21 @@ int python_seccomp_rules(struct config *_config) {
                                 SCMP_SYS(clock_gettime), SCMP_SYS(stat),
                                 SCMP_SYS(getdents), SCMP_SYS(lstat),
                                 SCMP_SYS(getcwd), SCMP_SYS(rt_sigprocmask),
-                                SCMP_SYS(rt_sigaction), SCMP_SYS(ioctl)};
+                                SCMP_SYS(rt_sigaction), SCMP_SYS(ioctl), 
+                                SCMP_SYS(set_tid_address), SCMP_SYS(set_robust_list),
+                                SCMP_SYS(prlimit64), SCMP_SYS(getrandom),
+                                SCMP_SYS(futex), SCMP_SYS(getdents64), 
+                                SCMP_SYS(sigaltstack), SCMP_SYS(pread64),
+                                SCMP_SYS(dup), SCMP_SYS(fcntl), SCMP_SYS(geteuid),
+                                SCMP_SYS(getuid), SCMP_SYS(getegid), SCMP_SYS(getgid),
+                                // wtf?
+                                SCMP_SYS(socket), SCMP_SYS(connect)
+                                };
 
     int syscalls_whitelist_length = sizeof(syscalls_whitelist) / sizeof(int);
     scmp_filter_ctx ctx = NULL;
     // load seccomp rules
-    ctx = seccomp_init(SCMP_ACT_LOG);
+    ctx = seccomp_init(SCMP_ACT_KILL);
     if (!ctx) {
         return LOAD_SECCOMP_FAILED;
     }

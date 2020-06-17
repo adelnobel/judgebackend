@@ -1,7 +1,7 @@
 #! /bin/bash
 set -ex
 dir=$PWD
-python -V
+python3 -V
 gcc -v
 g++ -v
 
