@@ -30,7 +30,7 @@ class PythonTest(base.BaseTestCase):
         print("Time: ", timeit.default_timer() - self.startTime)
 
     def get_config(self):
-        return {"max_cpu_time": 100,
+        return {"max_cpu_time": 400,
                 "max_real_time": 999,  # will be one second, ceils to 1000
                 "max_memory": 300 * 1024 * 1024,
                 "max_stack": 100 * 1024 * 1024,
@@ -73,6 +73,7 @@ class PythonTest(base.BaseTestCase):
         config["output_path"] = config["error_path"] = self.convert_to_relative_to_chroot_path(
             absolute_output_path)
         result = _judger.run(**config)
+        print(result)
         print(self.get_file_contents(absolute_output_path))
         self.assertEqual(result["result"], expected_result)
         self.assertEqual(result["signal"], expected_signal)
@@ -93,7 +94,7 @@ class PythonTest(base.BaseTestCase):
             test_file="arabic.py", expected_result=_judger.RESULT_SUCCESS,
             expected_signal=0, input_val="3\nصبح",
             expected_output="احلى مسا على فخادك\nصبح\nصبح\nصبح\n")
-    
+
     def test_ok_modules(self):
         # signal 0 -> ok
         self.helper(
@@ -113,18 +114,76 @@ class PythonTest(base.BaseTestCase):
         self.helper(
             test_file="sleep.py",
             expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
-            input_val="wtf", expected_output=None)
+            input_val=None, expected_output=None)
 
     def test_mkdir(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="mkdir.py",
             expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
-            input_val="wtf", expected_output=None)
+            input_val=None, expected_output=None)
 
     def test_system(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="system.py",
             expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
-            input_val="wtf", expected_output=None)
+            input_val=None, expected_output=None)
+
+    def test_subprocess(self):
+        # signal 31 -> bad system call (check logs)
+        self.helper(
+            test_file="subprocess.py",
+            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            input_val=None, expected_output=None, override_config=None)
+
+    def test_opencreate(self):
+        # signal 31 -> bad system call (check logs)
+        self.helper(
+            test_file="opencreate.py",
+            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            input_val=None, expected_output=None, override_config=None)
+
+    def test_openwrite(self):
+        # signal 31 -> bad system call (check logs)
+        self.helper(
+            test_file="opencreate.py",
+            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            input_val=None, expected_output=None, override_config=None)
+
+    def test_count_writable(self):
+        """
+            This test is a safety check to make sure there is no writable directories 
+            or files, if this test fails then you want to make sure permissions are set 
+            correctly on all the files in the chroot folder
+        """
+        root_path = os.path.join(
+            self.PYTHON_CHROOT_FOLDER, "nowthispathdoesntexist")
+        shutil.rmtree(root_path, ignore_errors=True)
+
+        # First lets make sure there is 0 writable files and directories
+        self.helper(
+            test_file="count_writable.py",
+            expected_result=_judger.RESULT_SUCCESS, expected_signal=0,
+            input_val="1", expected_output="0\n0\n")
+
+        # Now lets create some writable file and make sure it gets read
+        root_path = os.path.join(
+            self.PYTHON_CHROOT_FOLDER, "nowthispathdoesntexist")
+        try:
+            original_umask = os.umask(0)
+            file_dir = os.path.join(root_path, "dummy1", "dummy2")
+            os.makedirs(file_dir, 0o777)
+            file_path = os.path.join(file_dir, "dummy.txt")
+            open(file_path, "x").close()
+            os.chmod(file_path, 0o766)
+        finally:
+            os.umask(original_umask)
+
+        self.helper(
+            test_file="count_writable.py",
+            expected_result=_judger.RESULT_SUCCESS, expected_signal=0,
+            input_val="5", expected_output="3\n1\n")
+
+        # delete the dummy path
+        shutil.rmtree(root_path, ignore_errors=True)
