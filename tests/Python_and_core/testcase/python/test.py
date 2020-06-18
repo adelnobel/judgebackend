@@ -87,22 +87,44 @@ class PythonTest(base.BaseTestCase):
             expected_signal=0, input_val="wtf",
             expected_output="2\n3\n4\n5\n6\ntest\ntest 2\n")
 
+    def test_arabic(self):
+        # signal 0 -> ok
+        self.helper(
+            test_file="arabic.py", expected_result=_judger.RESULT_SUCCESS,
+            expected_signal=0, input_val="3\nصبح",
+            expected_output="احلى مسا على فخادك\nصبح\nصبح\nصبح\n")
+    
+    def test_ok_modules(self):
+        # signal 0 -> ok
+        self.helper(
+            test_file="ok_modules.py", expected_result=_judger.RESULT_SUCCESS,
+            expected_signal=0, input_val="3",
+            expected_output="9.0\n")
+
     def test_tle_cpu(self):
         # signal 9 -> killed
         self.helper(
             test_file="tle_cpu.py",
             expected_result=_judger.RESULT_CPU_TIME_LIMIT_EXCEEDED,
-            expected_signal=9, input_val="wtf", expected_output=None)
+            expected_signal=9, input_val=None, expected_output=None)
 
-    def test_tle_time(self):
+    def test_sleep(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
-            test_file="tle_time.py",
+            test_file="sleep.py",
             expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val="wtf", expected_output=None)
-    
-    def test_bad(self):
+
+    def test_mkdir(self):
+        # signal 31 -> bad system call (check logs)
         self.helper(
-            test_file="test.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=0,
+            test_file="mkdir.py",
+            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            input_val="wtf", expected_output=None)
+
+    def test_system(self):
+        # signal 31 -> bad system call (check logs)
+        self.helper(
+            test_file="system.py",
+            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val="wtf", expected_output=None)
