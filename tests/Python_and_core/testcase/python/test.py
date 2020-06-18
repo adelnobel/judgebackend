@@ -12,14 +12,6 @@ from .. import base
 
 
 class PythonTest(base.BaseTestCase):
-    PYTHON_CHROOT_FOLDER = "/home/adelaly/Desktop/python-jail"
-
-    def init_workspace(self, language):
-        base_workspace = os.path.join(self.PYTHON_CHROOT_FOLDER, "tmp")
-        workspace = os.path.join(base_workspace, language)
-        shutil.rmtree(workspace, ignore_errors=True)
-        os.makedirs(workspace)
-        return workspace
 
     def setUp(self):
         print("Running", self._testMethodName)
@@ -32,8 +24,8 @@ class PythonTest(base.BaseTestCase):
     def get_config(self):
         return {"max_cpu_time": 400,
                 "max_real_time": 999,  # will be one second, ceils to 1000
-                "max_memory": 300 * 1024 * 1024,
-                "max_stack": 100 * 1024 * 1024,
+                "max_memory": 600 * 1024 * 1024,
+                "max_stack": 300 * 1024 * 1024,
                 "max_process_number": 200,  # -1 for unlimited, setting this to a low number will cause execve to fail with Resource temporarily unavailable error. This should be fine to be -1 as seccomp should fight it
                 "max_output_size": 1024 * 1024,
                 "exe_path": "/bin/python3.8",
@@ -45,7 +37,7 @@ class PythonTest(base.BaseTestCase):
                 "env": ["PYTHONHOME=/", "test=judger"],
                 "log_path": "/log/judger_test.log",
                 "seccomp_rule_name": "python",
-                "chroot_path": self.PYTHON_CHROOT_FOLDER,
+                "chroot_path": self.CHROOT_DIR,
                 "uid": 65534,
                 "gid": 65534}
         return config
@@ -55,11 +47,6 @@ class PythonTest(base.BaseTestCase):
         content = self.get_file_contents(path)
         config["args"] = ["-c", content]
 
-    # Convert absolute path to path relative to chroot jail so we can feed into judger
-
-    def convert_to_relative_to_chroot_path(self, path):
-        return path.replace(self.PYTHON_CHROOT_FOLDER, "")
-
     def helper(self, test_file, expected_result, expected_signal,
                input_val=None, expected_output=None, override_config=None):
         config = self.get_config()
@@ -68,9 +55,9 @@ class PythonTest(base.BaseTestCase):
         self.populate_args(config, test_file)
         absolute_output_path = self.output_path()
         if input_val is not None:
-            config["input_path"] = self.convert_to_relative_to_chroot_path(
+            config["input_path"] = self.get_path_relative_to_chroot(
                 self.make_input(input_val))
-        config["output_path"] = config["error_path"] = self.convert_to_relative_to_chroot_path(
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(
             absolute_output_path)
         result = _judger.run(**config)
         print(result)
@@ -158,7 +145,7 @@ class PythonTest(base.BaseTestCase):
             correctly on all the files in the chroot folder
         """
         root_path = os.path.join(
-            self.PYTHON_CHROOT_FOLDER, "nowthispathdoesntexist")
+            self.CHROOT_DIR, "nowthispathdoesntexist")
         shutil.rmtree(root_path, ignore_errors=True)
 
         # First lets make sure there is 0 writable files and directories
@@ -168,8 +155,6 @@ class PythonTest(base.BaseTestCase):
             input_val="1", expected_output="0\n0\n")
 
         # Now lets create some writable file and make sure it gets read
-        root_path = os.path.join(
-            self.PYTHON_CHROOT_FOLDER, "nowthispathdoesntexist")
         try:
             original_umask = os.umask(0)
             file_dir = os.path.join(root_path, "dummy1", "dummy2")

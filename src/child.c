@@ -165,5 +165,7 @@ void child_process(FILE *log_fp, struct config *_config) {
     }
 
     execve(_config->exe_path, _config->args, _config->env);
+    char temo[100];
+    LOG_WARNING(log_fp, "A7A %s %s %s", _config->exe_path, _config->args[0], getcwd(temo, 100));
     CHILD_ERROR_EXIT(EXECVE_FAILED);
 }

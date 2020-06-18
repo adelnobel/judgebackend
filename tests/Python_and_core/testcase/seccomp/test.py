@@ -24,11 +24,8 @@ class SeccompTest(base.BaseTestCase):
     def test_fork(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("fork.c")
-        config["output_path"] = config["error_path"] = self.output_path()
-        result = _judger.run(**config)
-
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -45,11 +42,8 @@ class SeccompTest(base.BaseTestCase):
     def test_execve(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("execve.c")
-        config["output_path"] = config["error_path"] = self.output_path()
-        result = _judger.run(**config)
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("Helloworld\n", self.get_file_contents(config["output_path"]))
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -66,13 +60,10 @@ class SeccompTest(base.BaseTestCase):
     def test_write_file_using_open(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("write_file_open.c")
-        config["output_path"] = config["error_path"] = self.output_path()
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
         path = os.path.join(self.workspace, "file1.txt")
         config["args"] = [path, "w"]
-        result = _judger.run(**config)
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -89,13 +80,11 @@ class SeccompTest(base.BaseTestCase):
     def test_read_write_file_using_open(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("write_file_open.c")
-        config["output_path"] = config["error_path"] = self.output_path()
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
         path = os.path.join(self.workspace, "file2.txt")
         config["args"] = [path, "w+"]
-        result = _judger.run(**config)
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.get_file_contents(path))
+
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -112,13 +101,10 @@ class SeccompTest(base.BaseTestCase):
     def test_write_file_using_openat(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("write_file_openat.c")
-        config["output_path"] = config["error_path"] = self.output_path()
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
         path = os.path.join(self.workspace, "file3.txt")
         config["args"] = [path, "w"]
-        result = _judger.run(**config)
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -135,13 +121,10 @@ class SeccompTest(base.BaseTestCase):
     def test_read_write_file_using_openat(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("write_file_openat.c")
-        config["output_path"] = config["error_path"] = self.output_path()
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
         path = os.path.join(self.workspace, "file4.txt")
         config["args"] = [path, "w+"]
-        result = _judger.run(**config)
-        # without seccomp
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
-        self.assertEqual("", self.get_file_contents(path))
 
         # with general seccomp
         config["seccomp_rule_name"] = "general"
@@ -165,12 +148,8 @@ class SeccompTest(base.BaseTestCase):
     def test_exceveat(self):
         config = self.base_config
         config["exe_path"] = self._compile_c("execveat.c")
-        config["output_path"] = config["error_path"] = self.output_path()
-        result = _judger.run(**config)
-        if "syscall not found" in self.get_file_contents(config["output_path"]):
-            print("execveat syscall not found, test ignored")
-            return
-        self.assertEqual(result["result"], _judger.RESULT_SUCCESS)
+        output_path = self.output_path()
+        config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(output_path)
         
         # with general seccomp 
         config["seccomp_rule_name"] = "general"

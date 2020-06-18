@@ -118,7 +118,7 @@ void run(struct config *_config, struct result *_result) {
 
             if (_result->exit_code != 0) {
                 _result->result = RUNTIME_ERROR;
-                LOG_INFO(log_fp, "Failed with signal %d", _result->signal);
+                LOG_DEBUG(log_fp, "Failed with signal %d", _result->signal);
             }
 
             if (_result->signal == SIGSEGV) {
@@ -127,13 +127,13 @@ void run(struct config *_config, struct result *_result) {
                 }
                 else {
                     _result->result = RUNTIME_ERROR;
-                    LOG_INFO(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
+                    LOG_DEBUG(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
                 }
             }
             else {
                 if (_result->signal != 0) {
                     _result->result = RUNTIME_ERROR;
-                    LOG_INFO(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
+                    LOG_DEBUG(log_fp, "Failed with signal %d %s", _result->signal, strsignal(_result->signal));
                 }
                 if (_config->max_memory != UNLIMITED && _result->memory > _config->max_memory) {
                     _result->result = MEMORY_LIMIT_EXCEEDED;
