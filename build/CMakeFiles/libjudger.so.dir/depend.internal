@@ -19,19 +19,24 @@ CMakeFiles/libjudger.so.dir/src/logger.o
  /home/adelaly/Desktop/judgebackend/src/logger.h
 CMakeFiles/libjudger.so.dir/src/main.o
  /home/adelaly/Desktop/judgebackend/src/argtable3.h
+ /home/adelaly/Desktop/judgebackend/src/child.h
  /home/adelaly/Desktop/judgebackend/src/main.c
  /home/adelaly/Desktop/judgebackend/src/runner.h
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o
+ /home/adelaly/Desktop/judgebackend/src/child.h
  /home/adelaly/Desktop/judgebackend/src/rules/c_cpp.c
  /home/adelaly/Desktop/judgebackend/src/runner.h
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o
+ /home/adelaly/Desktop/judgebackend/src/child.h
  /home/adelaly/Desktop/judgebackend/src/rules/c_cpp_file_io.c
  /home/adelaly/Desktop/judgebackend/src/rules/seccomp_rules.h
  /home/adelaly/Desktop/judgebackend/src/runner.h
 CMakeFiles/libjudger.so.dir/src/rules/general.o
+ /home/adelaly/Desktop/judgebackend/src/child.h
  /home/adelaly/Desktop/judgebackend/src/rules/general.c
  /home/adelaly/Desktop/judgebackend/src/runner.h
 CMakeFiles/libjudger.so.dir/src/rules/python.o
+ /home/adelaly/Desktop/judgebackend/src/child.h
  /home/adelaly/Desktop/judgebackend/src/rules/python.c
  /home/adelaly/Desktop/judgebackend/src/runner.h
 CMakeFiles/libjudger.so.dir/src/runner.o

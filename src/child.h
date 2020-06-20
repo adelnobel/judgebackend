@@ -2,7 +2,7 @@
 #define JUDGER_CHILD_H
 
 #include <string.h>
-#include "runner.h"
+#include "definitions.h"
 
 #define CHILD_ERROR_EXIT(error_code)\
     {\

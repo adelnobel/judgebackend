@@ -1,5 +1,6 @@
 import json
 import subprocess
+import os
 
 UNLIMITED = -1
 VERSION = 0x020101
@@ -49,7 +50,9 @@ def run(max_cpu_time,
                 "max_process_number", "uid", "gid", "memory_limit_check_only"]
     str_vars = ["exe_path", "input_path", "output_path", "error_path", "log_path", "chroot_path"]
 
-    proc_args = ["/usr/lib/judger/libjudger.so"]
+    judger_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), "..", "..", "src", "bazel-bin", "judger"))
+
+    proc_args = [judger_path]
 
     for var in str_list_vars:
         value = vars()[var]

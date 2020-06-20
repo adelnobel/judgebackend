@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     };
 
     int exitcode = 0;
-    char name[] = "libjudger.so";
+    char name[] = "judger";
 
     int nerrors = arg_parse(argc, argv, arg_table);
 

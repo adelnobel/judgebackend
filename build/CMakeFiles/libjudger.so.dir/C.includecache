@@ -153,8 +153,6 @@ killer.h
 /home/adelaly/Desktop/judgebackend/src/child.h
 string.h
 -
-runner.h
-/home/adelaly/Desktop/judgebackend/src/runner.h
 
 /home/adelaly/Desktop/judgebackend/src/killer.c
 pthread.h
@@ -297,4 +295,6 @@ sys/types.h
 -
 stdio.h
 -
+child.h
+/home/adelaly/Desktop/judgebackend/src/child.h
 

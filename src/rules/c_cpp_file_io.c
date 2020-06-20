@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "seccomp_rules.h"
+#include "../definitions.h"
 
 
 int c_cpp_file_io_seccomp_rules(struct config *_config) {

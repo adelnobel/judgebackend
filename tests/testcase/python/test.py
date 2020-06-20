@@ -1,14 +1,13 @@
 # coding=utf-8
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 import timeit
 import sys
 import signal
 import shutil
 import os
 import resource
-import _judger
 
-from .. import base
+from .. import base, judger
 
 
 class PythonTest(base.BaseTestCase):
@@ -43,7 +42,7 @@ class PythonTest(base.BaseTestCase):
         return config
 
     def populate_args(self, config, src_name):
-        path = self.get_file_absolute_path("../../test_src/python/" + src_name)
+        path = self.get_file_absolute_path("../test_src/python/" + src_name)
         content = self.get_file_contents(path)
         config["args"] = ["-c", content]
 
@@ -59,7 +58,7 @@ class PythonTest(base.BaseTestCase):
                 self.make_input(input_val))
         config["output_path"] = config["error_path"] = self.get_path_relative_to_chroot(
             absolute_output_path)
-        result = _judger.run(**config)
+        result = judger.run(**config)
         print(result)
         print(self.get_file_contents(absolute_output_path))
         self.assertEqual(result["result"], expected_result)
@@ -71,21 +70,21 @@ class PythonTest(base.BaseTestCase):
     def test_normal(self):
         # signal 0 -> ok
         self.helper(
-            test_file="ok.py", expected_result=_judger.RESULT_SUCCESS,
+            test_file="ok.py", expected_result=judger.RESULT_SUCCESS,
             expected_signal=0, input_val="wtf",
             expected_output="2\n3\n4\n5\n6\ntest\ntest 2\n")
 
     def test_arabic(self):
         # signal 0 -> ok
         self.helper(
-            test_file="arabic.py", expected_result=_judger.RESULT_SUCCESS,
+            test_file="arabic.py", expected_result=judger.RESULT_SUCCESS,
             expected_signal=0, input_val="3\nصبح",
             expected_output="احلى مسا على فخادك\nصبح\nصبح\nصبح\n")
 
     def test_ok_modules(self):
         # signal 0 -> ok
         self.helper(
-            test_file="ok_modules.py", expected_result=_judger.RESULT_SUCCESS,
+            test_file="ok_modules.py", expected_result=judger.RESULT_SUCCESS,
             expected_signal=0, input_val="3",
             expected_output="9.0\n")
 
@@ -93,49 +92,49 @@ class PythonTest(base.BaseTestCase):
         # signal 9 -> killed
         self.helper(
             test_file="tle_cpu.py",
-            expected_result=_judger.RESULT_CPU_TIME_LIMIT_EXCEEDED,
+            expected_result=judger.RESULT_CPU_TIME_LIMIT_EXCEEDED,
             expected_signal=9, input_val=None, expected_output=None)
 
     def test_sleep(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="sleep.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None)
 
     def test_mkdir(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="mkdir.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None)
 
     def test_system(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="system.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None)
 
     def test_subprocess(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="subprocess.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None, override_config=None)
 
     def test_opencreate(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="opencreate.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None, override_config=None)
 
     def test_openwrite(self):
         # signal 31 -> bad system call (check logs)
         self.helper(
             test_file="opencreate.py",
-            expected_result=_judger.RESULT_RUNTIME_ERROR, expected_signal=31,
+            expected_result=judger.RESULT_RUNTIME_ERROR, expected_signal=31,
             input_val=None, expected_output=None, override_config=None)
 
     def test_count_writable(self):
@@ -151,7 +150,7 @@ class PythonTest(base.BaseTestCase):
         # First lets make sure there is 0 writable files and directories
         self.helper(
             test_file="count_writable.py",
-            expected_result=_judger.RESULT_SUCCESS, expected_signal=0,
+            expected_result=judger.RESULT_SUCCESS, expected_signal=0,
             input_val="1", expected_output="0\n0\n")
 
         # Now lets create some writable file and make sure it gets read
@@ -167,7 +166,7 @@ class PythonTest(base.BaseTestCase):
 
         self.helper(
             test_file="count_writable.py",
-            expected_result=_judger.RESULT_SUCCESS, expected_signal=0,
+            expected_result=judger.RESULT_SUCCESS, expected_signal=0,
             input_val="5", expected_output="3\n1\n")
 
         # delete the dummy path

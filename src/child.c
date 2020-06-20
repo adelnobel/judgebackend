@@ -16,20 +16,17 @@
 #include <sys/time.h>
 #include <sys/mount.h>
 
-#include "runner.h"
 #include "child.h"
 #include "logger.h"
 #include "rules/seccomp_rules.h"
-
+#include "definitions.h"
 #include "killer.h"
-
 
 void close_file(FILE *fp) {
     if (fp != NULL) {
         fclose(fp);
     }
 }
-
 
 void child_process(FILE *log_fp, struct config *_config) {
     FILE *input_file = NULL, *output_file = NULL, *error_file = NULL;
@@ -92,6 +89,8 @@ void child_process(FILE *log_fp, struct config *_config) {
         if (dup2(fileno(input_file), fileno(stdin)) == -1) {
             // todo log
             CHILD_ERROR_EXIT(DUP2_FAILED);
+        } else {
+            LOG_INFO(log_fp, "opened %s", _config->input_path);
         }
     }
 

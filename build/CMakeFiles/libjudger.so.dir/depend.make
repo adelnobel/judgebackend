@@ -18,19 +18,24 @@ CMakeFiles/libjudger.so.dir/src/logger.o: ../src/logger.c
 CMakeFiles/libjudger.so.dir/src/logger.o: ../src/logger.h
 
 CMakeFiles/libjudger.so.dir/src/main.o: ../src/argtable3.h
+CMakeFiles/libjudger.so.dir/src/main.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/main.o: ../src/main.c
 CMakeFiles/libjudger.so.dir/src/main.o: ../src/runner.h
 
+CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o: ../src/rules/c_cpp.c
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp.o: ../src/runner.h
 
+CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o: ../src/rules/c_cpp_file_io.c
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o: ../src/rules/seccomp_rules.h
 CMakeFiles/libjudger.so.dir/src/rules/c_cpp_file_io.o: ../src/runner.h
 
+CMakeFiles/libjudger.so.dir/src/rules/general.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/rules/general.o: ../src/rules/general.c
 CMakeFiles/libjudger.so.dir/src/rules/general.o: ../src/runner.h
 
+CMakeFiles/libjudger.so.dir/src/rules/python.o: ../src/child.h
 CMakeFiles/libjudger.so.dir/src/rules/python.o: ../src/rules/python.c
 CMakeFiles/libjudger.so.dir/src/rules/python.o: ../src/runner.h
 

@@ -5,8 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdbool.h>
-
-#include "../runner.h"
+#include "../definitions.h"
 
 int python_seccomp_rules(struct config *_config) {
     static int syscalls_whitelist[] = {SCMP_SYS(read), SCMP_SYS(fstat),

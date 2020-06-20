@@ -16,7 +16,6 @@
 
 #include "runner.h"
 #include "killer.h"
-#include "child.h"
 #include "logger.h"
 
 void init_result(struct result *_result) {

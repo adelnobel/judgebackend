@@ -4,9 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#include "../runner.h"
-
+#include "../definitions.h"
 
 int general_seccomp_rules(struct config *_config) {
     int syscalls_blacklist[] = {SCMP_SYS(clone),
